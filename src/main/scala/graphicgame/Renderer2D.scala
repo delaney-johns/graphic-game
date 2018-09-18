@@ -7,7 +7,7 @@ import scalafx.scene.image.Image
  * This is a 2D renderer that with draw your game elements to a Canvas. You should change the
  * images to fit the style of your game. Also, alter the entities to match what you have in
  * your game.
- * 
+ *
  * Unlike the Maze class, you will do quite a bit of editing this file to change images and alter
  * other details. You will have to uncomment the render method to use this.
  */
@@ -16,13 +16,13 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
   private var lastCenterY = 0.0
 
   // Put variables for images here. Put your images in the src/main/resources directory.
-  private val floorImage = Renderer2D.loadImage("/images/floor.png")
-  private val wallImage = Renderer2D.loadImage("/images/wall.png")
-  private val playerImage = Renderer2D.loadImage("/images/player.png")
-  private val enemyImage = Renderer2D.loadImage("/images/enemy.png")
+  private val floorImage = Renderer2D.loadImage("/images/grass.jpg")
+  private val wallImage = Renderer2D.loadImage("/images/wall.jpg")
+  private val playerImage = Renderer2D.loadImage("/images/player.jpg")
+  private val enemyImage = Renderer2D.loadImage("/images/enemy.jpg")
   private val generatorImage = Renderer2D.loadImage("/images/generator.png")
   private val bulletImage = Renderer2D.loadImage("/images/bullet.png")
-  
+
   /**
    * These two methods are used to figure out where to draw things. They are used by the render.
    */
@@ -38,41 +38,41 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
   /**
    * This method is called to render things to the screen.
    */
-//  def render(level: Level, cx: Double, cy: Double): Unit = {
-//    lastCenterX = cx
-//    lastCenterY = cy
-//
-//    val drawWidth = (gc.canvas.getWidth / blockSize).toInt + 1
-//    val drawHeight = (gc.canvas.getWidth / blockSize).toInt + 1
-//
-//    // Draw walls and floors
-//    for {
-//      x <- cx.toInt - drawWidth / 2 - 1 to cx.toInt + drawWidth / 2 + 1
-//      y <- cy.toInt - drawHeight / 2 - 1 to cy.toInt + drawHeight / 2 + 1
-//    } {
-//      val img = if (level.maze(x, y)) {
-//        wallImage
-//      } else {
-//        floorImage
-//      }
-//      gc.drawImage(img, blocksToPixelsX(x), blocksToPixelsY(y), blockSize, blockSize)
-//    }
-//
-//    // Draw entities
-//    for (e <- level.entities) {
-//      val img = e match {
-//        case p: Player => playerImage
-//        case e: Enemy => enemyImage
-//        case b: Bullet => bulletImage
-//      }
-//      if(level.maze.wrap) {
-//        for(rx <- -1 to 1; ry <- -1 to 1)
-//    	    gc.drawImage(img, blocksToPixelsX(e.x-e.width/2+rx*level.maze.width), blocksToPixelsY(e.y-e.height/2+ry*level.maze.height), e.width*blockSize, e.height*blockSize)
-//      } else {
-//    	  gc.drawImage(img, blocksToPixelsX(e.x-e.width/2), blocksToPixelsY(e.y-e.height/2), e.width*blockSize, e.height*blockSize)
-//      }
-//    }
-//  }
+  def render(level: Level, cx: Double, cy: Double): Unit = {
+    lastCenterX = cx
+    lastCenterY = cy
+
+    val drawWidth = (gc.canvas.getWidth / blockSize).toInt + 1
+    val drawHeight = (gc.canvas.getWidth / blockSize).toInt + 1
+
+    // Draw walls and floors
+    for {
+      x <- cx.toInt - drawWidth / 2 - 1 to cx.toInt + drawWidth / 2 + 1
+      y <- cy.toInt - drawHeight / 2 - 1 to cy.toInt + drawHeight / 2 + 1
+    } {
+      val img = if (level.maze(x, y)) {
+        wallImage
+      } else {
+        floorImage
+      }
+      gc.drawImage(img, blocksToPixelsX(x), blocksToPixelsY(y), blockSize, blockSize)
+    }
+
+    // Draw entities
+    for (e <- level.entities) {
+      val img = e match {
+        case p: Player => playerImage
+        case e: Enemy => enemyImage
+        //        case b: Bullet => bulletImage
+      }
+      if (level.maze.wrap) {
+        for (rx <- -1 to 1; ry <- -1 to 1)
+          gc.drawImage(img, blocksToPixelsX(e.x - e.width / 2 + rx * level.maze.width), blocksToPixelsY(e.y - e.height / 2 + ry * level.maze.height), e.width * blockSize, e.height * blockSize)
+      } else {
+        gc.drawImage(img, blocksToPixelsX(e.x - e.width / 2), blocksToPixelsY(e.y - e.height / 2), e.width * blockSize, e.height * blockSize)
+      }
+    }
+  }
 }
 
 object Renderer2D {
@@ -84,10 +84,10 @@ object Renderer2D {
    */
   def loadImage(path: String): Image = {
     val res = getClass.getResource(path)
-    if(res == null) {
-      new Image("file:src/main/resources"+path)
+    if (res == null) {
+      new Image("file:src/main/resources" + path)
     } else {
       new Image(res.toExternalForm())
     }
-  }  
+  }
 }

@@ -8,7 +8,7 @@ import scalafx.scene.shape.Shape
  * The main at the bottom has an example of how you should create a Maze. See the documentation comments on the
  * apply method.
  */
-class Maze private(val cellSize: Int, val wrap: Boolean, wallsInput: Array[Array[Int]]) {
+class Maze private (val cellSize: Int, val wrap: Boolean, wallsInput: Array[Array[Int]]) {
   require(cellSize > 1, "The cell size must be at least 2.")
   require(wallsInput.length > 0 && wallsInput(0).length > 0, "Dimensions of maze must both be greater than 0.")
   private val walls = wallsInput.map(row => row.map(i => i).toArray).toArray
@@ -17,7 +17,7 @@ class Maze private(val cellSize: Int, val wrap: Boolean, wallsInput: Array[Array
    * Tells you the width of the maze in cells.
    */
   def width = walls(0).length * cellSize
-  
+
   /**
    * Tells you the height of the maze in cells.
    */
@@ -37,7 +37,7 @@ class Maze private(val cellSize: Int, val wrap: Boolean, wallsInput: Array[Array
    * @param col The column to check.
    */
   def apply(row: Int, col: Int): Boolean = !open(row, col)
-  
+
   /**
    * This tells you if a rectangular region is clear or not. You should use this to tell if an entity can
    * occupy a particular location.
@@ -47,16 +47,16 @@ class Maze private(val cellSize: Int, val wrap: Boolean, wallsInput: Array[Array
    * @param height The height of the rectangular region.
    */
   def isClear(cx: Double, cy: Double, width: Double, height: Double): Boolean = {
-    val sx = (cx-width/2).toInt
-    val sy = (cy-height/2).toInt
-    val ex = (cx+width/2).toInt
-    val ey = (cy+height/2).toInt
-    (sx to ex).forall(x => (sy to ey).forall(y => open(x, y))) 
+    val sx = (cx - width / 2).toInt
+    val sy = (cy - height / 2).toInt
+    val ex = (cx + width / 2).toInt
+    val ey = (cy + height / 2).toInt
+    (sx to ex).forall(x => (sy to ey).forall(y => open(x, y)))
   }
 
   /**
    * Tells if a particular cell is open.
-   * 
+   *
    */
   def open(row: Int, col: Int): Boolean = {
     import Maze._
@@ -105,7 +105,7 @@ object Maze {
    * @param openFactor what percentage of walls should be removed. Should generally be between 0.5 and 0.9. Values over 1.0 are rejected.
    */
   def apply(cellSize: Int, wrap: Boolean, numRows: Int, numCols: Int, openFactor: Double): Maze = {
-    require(openFactor<1.0, "The value of openFactor has to be less than 1.0.")
+    require(openFactor < 1.0, "The value of openFactor has to be less than 1.0.")
     val walls = Array.fill(numRows, numCols)(HorizontalWall | VerticalWall)
     var count = 0
     val connected = Array.fill(numRows, numCols)(false)

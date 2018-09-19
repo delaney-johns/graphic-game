@@ -11,9 +11,6 @@ import scalafx.animation.AnimationTimer
 import scalafx.scene.input.KeyEvent
 import scalafx.scene.input.KeyCode
 
-/**
- * This is a stub for the graphical game.
- */
 object Main extends JFXApp {
   val canvas = new Canvas(1000, 800)
   val renderer = new Renderer2D(canvas.graphicsContext2D, 30)
@@ -21,12 +18,13 @@ object Main extends JFXApp {
   val player = new Player(1.5, 1.5, level)
   val enemy = new Enemy(5, 5, level)
   stage = new JFXApp.PrimaryStage {
-    title = "My Game" // Change this to match the theme of your game.
+    title = "Easter Eggs" 
     scene = new Scene(1000, 800) {
       content = List(canvas)
 
     }
 
+    //If the user presses a key, the player moves in the appropriate direction.
     canvas.onKeyReleased = (keyEvent: KeyEvent) => {
       keyEvent.code match {
         case KeyCode.Up => player.upReleased
@@ -36,6 +34,8 @@ object Main extends JFXApp {
         case _ =>
       }
     }
+    
+    //If a user releases a key, the player stops moving.
     canvas.onKeyPressed = (keyEvent: KeyEvent) => {
       keyEvent.code match {
         case KeyCode.Up => player.upPressed
@@ -47,7 +47,8 @@ object Main extends JFXApp {
     }
 
     canvas.requestFocus()
-
+    
+    //Timer is implemented since the characteristics of entities change depending on time.
     var lastTime = -1L
     val timer = AnimationTimer { time =>
       if (lastTime >= 0) {

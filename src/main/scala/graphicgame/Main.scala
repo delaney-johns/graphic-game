@@ -21,7 +21,6 @@ object Main extends JFXApp {
     title = "Easter Eggs" 
     scene = new Scene(1000, 800) {
       content = List(canvas)
-
     }
 
     //If the user presses a key, the player moves in the appropriate direction.
@@ -31,6 +30,10 @@ object Main extends JFXApp {
         case KeyCode.Down => player.downReleased
         case KeyCode.Left => player.leftReleased
         case KeyCode.Right => player.rightReleased
+        case KeyCode.W => player.wReleased
+        case KeyCode.A => player.aReleased
+        case KeyCode.S => player.sReleased
+        case KeyCode.D => player.dReleased 
         case _ =>
       }
     }
@@ -42,19 +45,23 @@ object Main extends JFXApp {
         case KeyCode.Down => player.downPressed
         case KeyCode.Left => player.leftPressed
         case KeyCode.Right => player.rightPressed
+        case KeyCode.W => player.wPressed
+        case KeyCode.A => player.aPressed
+        case KeyCode.S => player.sPressed
+        case KeyCode.D => player.dPressed
         case _ =>
       }
     }
-
+   
     canvas.requestFocus()
     
-    //Timer is implemented since the characteristics of entities change depending on time.
+    //Timer is implemented because the characteristics of entities change depending on time.
     var lastTime = -1L
     val timer = AnimationTimer { time =>
       if (lastTime >= 0) {
         val delay = (time - lastTime) * 1e-9
         level.updateAll(delay)
-        renderer.render(level, 0, 0)
+        renderer.render(level, player.x, player.y)
       }
       lastTime = time
     }

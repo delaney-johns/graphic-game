@@ -19,11 +19,23 @@ class Player(
   private var left = false
   private var right = false
 
+  //Projectiles are not present at the start of level.
+  private var w = false
+  private var a = false
+  private var s = false
+  private var d = false
+
   //When key is pressed, direction is set to true. This moves player using update method.
   def upPressed = { up = true }
   def downPressed = { down = true }
   def leftPressed = { left = true }
   def rightPressed = { right = true }
+
+  //When key is pressed, key is set to true. Used to make projectiles.
+  def wPressed = { w = true }
+  def aPressed = { a = true }
+  def sPressed = { s = true }
+  def dPressed = { d = true }
 
   //When key is released, player cannot move.
   def upReleased = { up = false }
@@ -31,15 +43,26 @@ class Player(
   def leftReleased = { left = false }
   def rightReleased = { right = false }
 
-  //If key is pressed, player moves in appropriate x, y direction.
+  //When key is released, player stops shooting projectiles.
+  def wReleased = { w = false }
+  def aReleased = { a = false }
+  def sReleased = { s = false }
+  def dReleased = { d = false }
+
+  //If directional key is pressed, player moves in appropriate x, y direction.
+  //If WASD keys are pressed, projectiles shoot in appropriate direction.
   def update(delay: Double): Unit = {
     if (up) move(0, -speed * delay)
     if (down) move(0, speed * delay)
     if (left) move(-speed * delay, 0)
     if (right) move(speed * delay, 0)
+    if (w) new Projectile(x, y, level, 0, -speed * delay)
+    if (a) new Projectile(x, y, level, -speed * delay, 0)
+    if (s) new Projectile(x, y, level, 0, speed * delay)
+    if (d) new Projectile(x, y, level, speed * delay, 0)
   }
 
-  //If the place a player wants to go does not have walls, then they can move there.
+  //If the place a player wants to go is clear (does not have walls), then they can move there.
   def move(changeX: Double, changeY: Double): Unit = {
     if (level.maze.isClear(_x + changeX, _y + changeY, width, height)) {
       _x += changeX

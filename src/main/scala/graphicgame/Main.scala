@@ -14,7 +14,7 @@ import scalafx.scene.input.KeyCode
 object Main extends JFXApp {
   val canvas = new Canvas(1000, 800)
   val renderer = new Renderer2D(canvas.graphicsContext2D, 30)
-  val level = new Level
+  val level = new PassableLevel
   val player = new Player(1.5, 1.5, level)
   val enemy = new Enemy(5, 5, level)
   stage = new JFXApp.PrimaryStage {
@@ -61,7 +61,7 @@ object Main extends JFXApp {
       if (lastTime >= 0) {
         val delay = (time - lastTime) * 1e-9
         level.updateAll(delay)
-        renderer.render(level, player.x, player.y)
+        renderer.render(passableLevel, player.x, player.y)
       }
       lastTime = time
     }

@@ -38,7 +38,7 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
   /**
    * This method is called to render things to the screen.
    */
-  def render(level: Level, cx: Double, cy: Double): Unit = {
+  def render(passableLevel: PassableLevel, cx: Double, cy: Double): Unit = {
     lastCenterX = cx
     lastCenterY = cy
 
@@ -50,7 +50,7 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
       x <- cx.toInt - drawWidth / 2 - 1 to cx.toInt + drawWidth / 2 + 1
       y <- cy.toInt - drawHeight / 2 - 1 to cy.toInt + drawHeight / 2 + 1
     } {
-      val img = if (level.maze(x, y)) {
+      val img = if (passableLevel.maze(x, y)) {
         wallImage
       } else {
         floorImage
@@ -59,22 +59,22 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
     }
 
     // Draw entities
-    for (e <- level.entities) {
+    for (e <- passableLevel.entities) {
       val img = e match {
         case p: Player => playerImage
         case e: Enemy => enemyImage
                 case b: Projectile => projectileImage
       }
-      if (level.maze.wrap) {
+      if (passableLevel.maze.wrap) {
         for (rx <- -1 to 1; ry <- -1 to 1)
-          gc.drawImage(img, blocksToPixelsX(e.x - e.width / 2 + rx * level.maze.width), blocksToPixelsY(e.y - e.height / 2 + ry * level.maze.height), e.width * blockSize, e.height * blockSize)
+          gc.drawImage(img, blocksToPixelsX(e.x - e.width / 2 + rx * passableLevel.maze.width), blocksToPixelsY(e.y - e.height / 2 + ry * passableLevel.maze.height), e.width * blockSize, e.height * blockSize)
       } else {
         gc.drawImage(img, blocksToPixelsX(e.x - e.width / 2), blocksToPixelsY(e.y - e.height / 2), e.width * blockSize, e.height * blockSize)
       }
     }
   }
-}
 
+}
 object Renderer2D {
   /**
    * This method assumes that you are putting your images in src/main/resources. This directory is

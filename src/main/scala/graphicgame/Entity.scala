@@ -9,3 +9,4 @@ trait Entity {
   def height: Double
   def update(delay: Double): Unit
 }
+

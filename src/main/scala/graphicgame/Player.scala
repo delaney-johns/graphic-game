@@ -1,9 +1,11 @@
 package graphicgame
 
+import java.rmi.server.UnicastRemoteObject
+
 class Player(
   private var _x: Double,
   private var _y: Double,
-  val level: Level) extends Entity {
+  val level: Level) extends UnicastRemoteObject with Entity {
   level += this
   def x: Double = _x
   def y: Double = _y

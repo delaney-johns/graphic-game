@@ -1,7 +1,5 @@
 package graphicgame
 
-import scalafx.scene.shape.Shape
-
 /**
  * This is an implementation of a random maze. I don't recommend that you edit this file much. You will have to
  * add one thing when you add networking, but other than that one added element, you should not alter this file.

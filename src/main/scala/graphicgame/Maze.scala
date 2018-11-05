@@ -6,7 +6,7 @@ package graphicgame
  * The main at the bottom has an example of how you should create a Maze. See the documentation comments on the
  * apply method.
  */
-class Maze private (val cellSize: Int, val wrap: Boolean, wallsInput: Array[Array[Int]]) {
+class Maze private (val cellSize: Int, val wrap: Boolean, wallsInput: Array[Array[Int]]) extends Serializable {
   require(cellSize > 1, "The cell size must be at least 2.")
   require(wallsInput.length > 0 && wallsInput(0).length > 0, "Dimensions of maze must both be greater than 0.")
   private val walls = wallsInput.map(row => row.map(i => i).toArray).toArray

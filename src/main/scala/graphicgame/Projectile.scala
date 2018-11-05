@@ -30,4 +30,6 @@ class Projectile(
     else
      level.entities -= this
   }
+  
+    def buildPassableEntity = PassableEntity(EntityType.Enemy, x, y, width, height)
 }

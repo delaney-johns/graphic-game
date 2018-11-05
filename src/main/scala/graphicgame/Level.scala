@@ -31,7 +31,11 @@ class Level {
       entity.update(delay)
     }
   }
-
+  def buildPassableLevel: PassableLevel = {
+  PassableLevel(maze, entities.map(_.buildPassableEntity))  
+  }
+  
+  
   //Takes location of enemy and location of player.
   //Determines the amount of steps in a direction from enemy's location to player's location.
   val offsets = Array((-1, 0), (1, 0), (0, 1), (0, -1))

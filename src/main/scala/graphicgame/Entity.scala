@@ -8,5 +8,6 @@ trait Entity {
   def width: Double
   def height: Double
   def update(delay: Double): Unit
+  def buildPassableEntity: PassableEntity
 }
 

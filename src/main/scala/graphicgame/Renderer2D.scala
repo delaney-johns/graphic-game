@@ -60,10 +60,10 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
 
     // Draw entities
     for (e <- passableLevel.entities) {
-      val img = e match {
-        case p: Player => playerImage
-        case e: Enemy => enemyImage
-                case b: Projectile => projectileImage
+      val img = e.typeOfEntity match {
+        case EntityType.Player => playerImage
+        case EntityType.Enemy => enemyImage
+        case EntityType.Projectile => projectileImage
       }
       if (passableLevel.maze.wrap) {
         for (rx <- -1 to 1; ry <- -1 to 1)

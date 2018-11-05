@@ -2,10 +2,31 @@ package graphicgame
 
 import java.rmi.server.UnicastRemoteObject
 
+@remote trait RemotePlayer {
+  def leftPressed()
+  def leftReleased()
+  def rightPressed()
+  def rightReleased()
+  def upPressed()
+  def upReleased()
+  def downPressed()
+  def downReleased()
+  def wPressed()
+  def wReleased()
+  def aPressed()
+  def aReleased()
+  def sPressed()
+  def sReleased()
+  def dPressed()
+  def dReleased()
+  def x: Double
+  def y: Double
+}
+
 class Player(
   private var _x: Double,
   private var _y: Double,
-  val level: Level) extends UnicastRemoteObject with Entity {
+  val level: Level) extends UnicastRemoteObject with Entity with RemotePlayer{
   level += this
   def x: Double = _x
   def y: Double = _y
@@ -71,4 +92,6 @@ class Player(
       _y += changeY
     }
   }
+  
+  def buildPassableEntity = PassableEntity(EntityType.Player, x, y, width, height)
 }

@@ -1,24 +1,33 @@
 package graphicgame
 
-import scalafx.Includes._
+import java.rmi.server.UnicastRemoteObject
 import scalafx.application.JFXApp
-import scalafx.scene.text
-import scalafx.scene.Scene
-import scalafx.scene.control.Label
-import scalafx.scene.paint.Color
 import scalafx.scene.canvas.Canvas
+import scalafx.scene.Scene
 import scalafx.animation.AnimationTimer
-import scalafx.scene.input.KeyEvent
 import scalafx.scene.input.KeyCode
+import scalafx.scene.input.KeyEvent
+import scalafx.Includes._
+import scalafx.application.Platform
+import java.rmi.Naming
 
-object Main extends JFXApp {
+@remote trait RemoteClient {
+  def drawLevel(passableLevel: PassableLevel): Unit
+
+}
+
+object Client extends UnicastRemoteObject with JFXApp with RemoteClient {
   val canvas = new Canvas(1000, 800)
   val renderer = new Renderer2D(canvas.graphicsContext2D, 30)
-  val level = new Level
-  val player = new Player(1.5, 1.5, level)
-  val enemy = new Enemy(5, 5, level)
+  val server = Naming.lookup("rmi://localhost/GraphicGameServer") match {
+    case s: RemoteServer => s
+  }
+  val player: RemotePlayer = server.connect(this)
+  def drawLevel(passableLevel: PassableLevel): Unit = {
+    Platform.runLater(renderer.render(passableLevel, player.x, player.y))
+  }
   stage = new JFXApp.PrimaryStage {
-    title = "Easter Eggs" 
+    title = "Easter Eggs"
     scene = new Scene(1000, 800) {
       content = List(canvas)
     }
@@ -33,11 +42,11 @@ object Main extends JFXApp {
         case KeyCode.W => player.wReleased
         case KeyCode.A => player.aReleased
         case KeyCode.S => player.sReleased
-        case KeyCode.D => player.dReleased 
+        case KeyCode.D => player.dReleased
         case _ =>
       }
     }
-    
+
     //If a user releases a key, the player stops moving.
     canvas.onKeyPressed = (keyEvent: KeyEvent) => {
       keyEvent.code match {
@@ -52,19 +61,8 @@ object Main extends JFXApp {
         case _ =>
       }
     }
-   
+
     canvas.requestFocus()
-    
-    //Timer is implemented because the characteristics of entities change depending on time.
-    var lastTime = -1L
-    val timer = AnimationTimer { time =>
-      if (lastTime >= 0) {
-        val delay = (time - lastTime) * 1e-9
-        level.updateAll(delay)
-        renderer.render(level.buildPassableLevel, player.x, player.y)
-      }
-      lastTime = time
-    }
-    timer.start()
+
   }
 }

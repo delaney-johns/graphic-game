@@ -24,12 +24,18 @@ class Level {
   def players = _entities.collect {
     case p: Player => p
   }
+  
+    //Builds collection of enemies.
+  def enemies = _entities.collect {
+    case e: Enemy1 => e
+  }
 
   //Entities update based on a time.
   def updateAll(delay: Double): Unit = {
     for (entity <- entities) {
       entity.update(delay)
     }
+    _entities = entities.filter(!_.isDead)
   }
   def buildPassableLevel: PassableLevel = {
   PassableLevel(maze, entities.map(_.buildPassableEntity))  

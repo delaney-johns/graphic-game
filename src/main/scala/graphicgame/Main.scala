@@ -16,7 +16,7 @@ object Main extends JFXApp {
   val renderer = new Renderer2D(canvas.graphicsContext2D, 30)
   val level = new Level
   val player = new Player(1.5, 1.5, level)
-  val enemy = new Enemy(5, 5, level)
+  val enemy = new Enemy1(5, 5, level)
   stage = new JFXApp.PrimaryStage {
     title = "Easter Eggs" 
     scene = new Scene(1000, 800) {

@@ -11,6 +11,9 @@ import scalafx.Includes._
 import scalafx.application.Platform
 import java.rmi.Naming
 
+//list of remote client in main
+//death=> respawn in new location or be a spectator(not on entity list) but they're still connected
+
 @remote trait RemoteClient {
   def drawLevel(passableLevel: PassableLevel): Unit
 

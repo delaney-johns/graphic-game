@@ -9,5 +9,6 @@ trait Entity {
   def height: Double
   def update(delay: Double): Unit
   def buildPassableEntity: PassableEntity
+  def isDead: Boolean
 }
 

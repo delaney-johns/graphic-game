@@ -26,12 +26,15 @@ import java.rmi.server.UnicastRemoteObject
 class Player(
   private var _x: Double,
   private var _y: Double,
-  val level: Level) extends UnicastRemoteObject with Entity with RemotePlayer{
+  val level: Level) extends UnicastRemoteObject with Entity with RemotePlayer {
   level += this
   def x: Double = _x
   def y: Double = _y
   def width: Double = 1
   def height: Double = 1
+  var dead = false
+  def isDead: Boolean = dead
+  private var coolDown = 0
 
   //Default speed for player.
   val speed = 3.0
@@ -75,14 +78,32 @@ class Player(
   //If directional key is pressed, player moves in appropriate x, y direction.
   //If WASD keys are pressed, projectiles shoot in appropriate direction.
   def update(delay: Double): Unit = {
+    println("updating")
+    coolDown -= delay.toInt
+    println("coolDown is:" + coolDown)
     if (up) move(0, -speed * delay)
     if (down) move(0, speed * delay)
     if (left) move(-speed * delay, 0)
     if (right) move(speed * delay, 0)
-    if (w) new Projectile(x, y, level, 0, -speed * delay)
-    if (a) new Projectile(x, y, level, -speed * delay, 0)
-    if (s) new Projectile(x, y, level, 0, speed * delay)
-    if (d) new Projectile(x, y, level, speed * delay, 0)
+    //TODO: make projectile release slower 
+    if (w && coolDown <= 0) {
+      new Projectile(x, y, level, 0, -speed * delay)
+      //makes the bullet
+      coolDown = 3
+    }
+    if (a && coolDown <= 0) {
+      new Projectile(x, y, level, -speed * delay, 0)
+      coolDown = 3
+    }
+    if (s && coolDown <= 0) {
+      new Projectile(x, y, level, 0, speed * delay)
+      coolDown = 3
+    }
+    if (d && coolDown <= 0) {
+      new Projectile(x, y, level, speed * delay, 0)
+      coolDown = 3
+    }
+    killPlayer
   }
 
   //If the place a player wants to go is clear (does not have walls), then they can move there.
@@ -92,6 +113,22 @@ class Player(
       _y += changeY
     }
   }
-  
+
+  def killPlayer = {
+    for (enemy <- level.enemies) {
+      if (intersects(enemy)) {
+        dead = true
+        println(enemy)
+      }
+    }
+  }
+
+  //Checks to see if player intersects with enemy.
+  def intersects(enemy: Enemy1): Boolean = {
+    val overlapX = (_x - enemy.x).abs < 0.5 * (width + enemy.width)
+    val overlapY = (_y - enemy.y).abs < 0.5 * (height + enemy.height)
+    overlapX && overlapY
+  }
+
   def buildPassableEntity = PassableEntity(EntityType.Player, x, y, width, height)
 }

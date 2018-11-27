@@ -1,7 +1,6 @@
 package graphicgame
 
-//Each enemy has a position, size, and is part of only currently implemented level.
-class Enemy(
+class Enemy2 (
   private var _x: Double,
   private var _y: Double,
   val level: Level) extends Entity {
@@ -11,8 +10,10 @@ class Enemy(
   def width: Double = 1
   def height: Double = 1
   var dead = false
-  //Default speed for an enemy
-  val speed = 3
+  def isDead: Boolean = dead
+  var r = scala.util.Random.nextInt(5)
+  //Default speed for an enemy2
+  val speed = 10
 
   //If enemy's location intersects with a projectile, it is dead.
   def killEnemy = {
@@ -31,32 +32,19 @@ class Enemy(
     } else {
       val players = level.players
       if (players.nonEmpty) {
-
-        //Based on shortest path, creates list that is used to determine which direction enemy should move in.
-        //Order is up, right, down, left
-        val distanceList = List(
-          level.shortestPath(x.toInt, y.toInt - 1, players(0).x.toInt, players(0).y.toInt),
-          level.shortestPath(x.toInt + 1, y.toInt, players(0).x.toInt, players(0).y.toInt),
-          level.shortestPath(x.toInt, y.toInt + 1, players(0).x.toInt, players(0).y.toInt),
-          level.shortestPath(x.toInt - 1, y.toInt, players(0).x.toInt, players(0).y.toInt))
-
-        //Determines index of minimum steps
-        val distance = distanceList.indexOf(distanceList.min)
-
-        //Based on index of list, move in that a direction (up, right, down, or left)
-        if (distance == 0) {
+        //Based on randomization, move in that a direction (up, right, down, or left)
+        if (r == 0) {
           move(0, -speed * delay)
         }
-        if (distance == 1) {
+        if (r == 1) {
           move(speed * delay, 0)
         }
-        if (distance == 2) {
+        if (r == 2) {
           move(0, speed * delay)
         }
-        if (distance == 3) {
+        if (r == 3) {
           move(-speed * delay, 0)
         }
-
       }
     }
   }
@@ -76,5 +64,5 @@ class Enemy(
     }
   }
 
-  def buildPassableEntity = PassableEntity(EntityType.Enemy, x, y, width, height)
+  def buildPassableEntity = PassableEntity(EntityType.Enemy2, x, y, width, height)
 }

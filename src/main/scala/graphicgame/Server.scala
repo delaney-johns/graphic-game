@@ -12,7 +12,9 @@ object Server extends UnicastRemoteObject with App with RemoteServer {
   LocateRegistry.createRegistry(1099)
   Naming.rebind("GraphicGameServer", this)
   val level = new Level
-  val enemy = new Enemy(5, 5, level)
+  //TODO: make more than one enemy appear in random places each time
+  val enemy = new Enemy1(5, 5, level)
+  val enemy2 = new Enemy2(10, 10, level)
   var clientList = List[RemoteClient]()
   def connect(client: RemoteClient): RemotePlayer = {
     clientList = client :: clientList

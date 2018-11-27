@@ -2,5 +2,5 @@ package graphicgame
 
 object EntityType extends Enumeration{
 
-  val Player, Enemy, Projectile = Value
+  val Player, Enemy1, Enemy2, Projectile = Value
 }

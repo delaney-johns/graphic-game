@@ -19,7 +19,8 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
   private val floorImage = Renderer2D.loadImage("/images/grass.jpg")
   private val wallImage = Renderer2D.loadImage("/images/wall.jpg")
   private val playerImage = Renderer2D.loadImage("/images/player.jpg")
-  private val enemyImage = Renderer2D.loadImage("/images/enemy.jpg")
+  private val enemy1Image = Renderer2D.loadImage("/images/enemy.jpg")
+  private val enemy2Image = Renderer2D.loadImage("/images/enemy2image.jpg")
   private val generatorImage = Renderer2D.loadImage("/images/generator.png")
   private val projectileImage = Renderer2D.loadImage("/images/projectile.jpg")
 
@@ -62,7 +63,8 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
     for (e <- passableLevel.entities) {
       val img = e.typeOfEntity match {
         case EntityType.Player => playerImage
-        case EntityType.Enemy => enemyImage
+        case EntityType.Enemy1 => enemy1Image
+        case EntityType.Enemy2 => enemy2Image
         case EntityType.Projectile => projectileImage
       }
       if (passableLevel.maze.wrap) {

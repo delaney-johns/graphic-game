@@ -5,13 +5,14 @@ class Projectile(
   private var _y: Double,
   val level: Level,
   val directionX: Double,
-  val directionY: Double
-) extends Entity {
+  val directionY: Double) extends Entity {
   level += this
   def x: Double = _x
   def y: Double = _y
   def width: Double = 1
   def height: Double = 1
+  var dead = false
+  def isDead: Boolean = dead
 
   //Default speed for a projectile
   val speed = 3
@@ -26,10 +27,9 @@ class Projectile(
     if (level.maze.isClear(_x + changeX, _y + changeY, width, height)) {
       _x += changeX
       _y += changeY
-    }
-    else
-     level.entities -= this
+    } else
+      dead = true
   }
-  
-    def buildPassableEntity = PassableEntity(EntityType.Enemy, x, y, width, height)
+
+  def buildPassableEntity = PassableEntity(EntityType.Projectile, x, y, width, height)
 }

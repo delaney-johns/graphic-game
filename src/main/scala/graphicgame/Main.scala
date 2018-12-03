@@ -15,10 +15,9 @@ object Main extends JFXApp {
   val canvas = new Canvas(1000, 800)
   val renderer = new Renderer2D(canvas.graphicsContext2D, 30)
   val level = new Level
-  val player = new Player(1.5, 1.5, level)
-  val enemy = new Enemy1(5, 5, level)
+  val player = new Player(1.5+ util.Random.nextInt(20)*3, 1.5+ util.Random.nextInt(20)*3, level)
   stage = new JFXApp.PrimaryStage {
-    title = "Easter Eggs" 
+    title = "Easter Eggs"
     scene = new Scene(1000, 800) {
       content = List(canvas)
     }
@@ -33,11 +32,11 @@ object Main extends JFXApp {
         case KeyCode.W => player.wReleased
         case KeyCode.A => player.aReleased
         case KeyCode.S => player.sReleased
-        case KeyCode.D => player.dReleased 
+        case KeyCode.D => player.dReleased
         case _ =>
       }
     }
-    
+
     //If a user releases a key, the player stops moving.
     canvas.onKeyPressed = (keyEvent: KeyEvent) => {
       keyEvent.code match {
@@ -52,9 +51,9 @@ object Main extends JFXApp {
         case _ =>
       }
     }
-   
+
     canvas.requestFocus()
-    
+
     //Timer is implemented because the characteristics of entities change depending on time.
     var lastTime = -1L
     val timer = AnimationTimer { time =>

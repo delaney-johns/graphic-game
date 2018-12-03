@@ -19,6 +19,7 @@ class Enemy1(
   def killEnemy = {
     for (projectile <- level.projectiles) {
       if (intersects(projectile)) {
+        projectile.hitEnemy() 
         dead = true
       }
     }
@@ -27,18 +28,18 @@ class Enemy1(
   //Moves an enemy (if it is not dead) based on the shortest path to the player.
   def update(delay: Double): Unit = {
     killEnemy
-    if (dead) {
-      level.entities -= this
-    } else {
+    if (!dead) {
       val players = level.players
       if (players.nonEmpty) {
         //Based on shortest path, creates list that is used to determine which direction enemy should move in.
         //Order is up, right, down, left
         val distanceList = List(
-          level.shortestPath(x.toInt, y.toInt - 1, players(0).x.toInt, players(0).y.toInt),
-          level.shortestPath(x.toInt + 1, y.toInt, players(0).x.toInt, players(0).y.toInt),
-          level.shortestPath(x.toInt, y.toInt + 1, players(0).x.toInt, players(0).y.toInt),
-          level.shortestPath(x.toInt - 1, y.toInt, players(0).x.toInt, players(0).y.toInt))
+          level.shortestPath(x, y - 1, players(0).x, players(0).y),
+          level.shortestPath(x + 1, y, players(0).x, players(0).y),
+          level.shortestPath(x, y + 1, players(0).x, players(0).y),
+          level.shortestPath(x - 1, y, players(0).x, players(0).y))
+
+        println(distanceList)
 
         //Determines index of minimum steps
         val distance = distanceList.indexOf(distanceList.min)
@@ -56,7 +57,6 @@ class Enemy1(
         if (distance == 3) {
           move(-speed * delay, 0)
         }
-
       }
     }
   }
@@ -73,7 +73,7 @@ class Enemy1(
     if (level.maze.isClear(_x + changeX, _y + changeY, width, height)) {
       _x += changeX
       _y += changeY
-    }
+    } else println("shortest path took me in a wall.")
   }
 
   def buildPassableEntity = PassableEntity(EntityType.Enemy1, x, y, width, height)

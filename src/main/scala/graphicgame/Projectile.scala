@@ -14,12 +14,20 @@ class Projectile(
   var dead = false
   def isDead: Boolean = dead
 
+  def hitEnemy() = dead = true
+
   //Default speed for a projectile
   val speed = 3
 
-  //Moves a projectile up, if walls are not in the path
+  //Moves a projectile, if walls are not in the path
   def update(delay: Double): Unit = {
     move(directionX, directionY)
+  }
+
+  def intersects(enemy: Entity): Boolean = {
+    val overlapX = (_x - enemy.x).abs < 0.5 * (width + enemy.width)
+    val overlapY = (_y - enemy.y).abs < 0.5 * (height + enemy.height)
+    overlapX && overlapY
   }
 
   //Checks if a spot is clear. If yes, changes the current position to the new position. Projectile disappears from level when it hits wall.

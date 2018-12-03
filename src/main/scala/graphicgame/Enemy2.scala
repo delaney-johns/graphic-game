@@ -1,6 +1,6 @@
 package graphicgame
 
-class Enemy2 (
+class Enemy2(
   private var _x: Double,
   private var _y: Double,
   val level: Level) extends Entity {
@@ -13,12 +13,13 @@ class Enemy2 (
   def isDead: Boolean = dead
   var r = scala.util.Random.nextInt(5)
   //Default speed for an enemy2
-  val speed = 10
+  val speed = 5
 
   //If enemy's location intersects with a projectile, it is dead.
   def killEnemy = {
     for (projectile <- level.projectiles) {
       if (intersects(projectile)) {
+        projectile.hitEnemy()
         dead = true
       }
     }
@@ -27,17 +28,15 @@ class Enemy2 (
   //Moves an enemy (if it is not dead) based on the shortest path to the player.
   def update(delay: Double): Unit = {
     killEnemy
-    if (dead) {
-      level.entities -= this
-    } else {
+    if (!dead) {
       val players = level.players
       if (players.nonEmpty) {
-        //Based on randomization, move in that a direction (up, right, down, or left)
+        //Based on randomization, move in that a direction (up, right, down, or left).
         if (r == 0) {
           move(0, -speed * delay)
         }
         if (r == 1) {
-          move(speed * delay, 0)
+          move(0, -speed * delay)
         }
         if (r == 2) {
           move(0, speed * delay)
@@ -45,6 +44,7 @@ class Enemy2 (
         if (r == 3) {
           move(-speed * delay, 0)
         }
+        r = scala.util.Random.nextInt(5)
       }
     }
   }

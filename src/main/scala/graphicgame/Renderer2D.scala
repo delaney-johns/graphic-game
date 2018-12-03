@@ -2,7 +2,7 @@ package graphicgame
 
 import scalafx.scene.canvas.GraphicsContext
 import scalafx.scene.image.Image
-
+//TODO draw string on for scoreboard
 /**
  * This is a 2D renderer that with draw your game elements to a Canvas. You should change the
  * images to fit the style of your game. Also, alter the entities to match what you have in
@@ -42,7 +42,7 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
   def render(passableLevel: PassableLevel, cx: Double, cy: Double): Unit = {
     lastCenterX = cx
     lastCenterY = cy
-
+    
     val drawWidth = (gc.canvas.getWidth / blockSize).toInt + 1
     val drawHeight = (gc.canvas.getWidth / blockSize).toInt + 1
 
@@ -75,7 +75,7 @@ class Renderer2D(gc: GraphicsContext, blockSize: Double) {
       }
     }
   }
-
+//draw string in here
 }
 object Renderer2D {
   /**

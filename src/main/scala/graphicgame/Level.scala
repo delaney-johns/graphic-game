@@ -24,10 +24,11 @@ class Level {
   def players = _entities.collect {
     case p: Player => p
   }
-  
-    //Builds collection of enemies.
+
+  //Builds collection of enemies.
   def enemies = _entities.collect {
-    case e: Enemy1 => e
+    case e1: Enemy1 => e1
+    case e2: Enemy2 => e2
   }
 
   //Entities update based on a time.
@@ -38,31 +39,32 @@ class Level {
     _entities = entities.filter(!_.isDead)
   }
   def buildPassableLevel: PassableLevel = {
-  PassableLevel(maze, entities.map(_.buildPassableEntity))  
+    PassableLevel(maze, entities.map(_.buildPassableEntity))
   }
-  
-  
+
   //Takes location of enemy and location of player.
   //Determines the amount of steps in a direction from enemy's location to player's location.
   val offsets = Array((-1, 0), (1, 0), (0, 1), (0, -1))
-  def shortestPath(sx: Int, sy: Int, ex: Int, ey: Int): Int = {
-    val queue = new collection.mutable.Queue[(Int, Int, Int)]()
-    var visited = Set(sx -> sy)
-    queue.enqueue((sx, sy, 0))
-    while (!queue.isEmpty) {
-      val (x, y, steps) = queue.dequeue()
-      if (x == ex && y == ey) return steps
-      for ((dx, dy) <- offsets) {
-        val nx = x + dx
-        val ny = y + dy
-        if (ny >= 0 && ny < maze.height && nx >= 0 && nx < maze.width &&
-          maze.open(ny, nx) && !visited(nx -> ny)) {
-          queue.enqueue((nx, ny, steps + 1))
-          visited += (nx -> ny)
+  def shortestPath(sx: Double, sy: Double, ex: Double, ey: Double): Double = {
+    if (maze.isClear(sx, sy, 1, 1)) {
+      val queue = new collection.mutable.Queue[(Double, Double, Double)]()
+      var visited = Set(sx -> sy)
+      queue.enqueue((sx, sy, 0))
+      while (!queue.isEmpty) {
+        val (x, y, steps) = queue.dequeue()
+        if ((x - ex).abs < 1 && (y - ey).abs < 1) return steps
+        for ((dx, dy) <- offsets) {
+          val nx = x + dx
+          val ny = y + dy
+          if (ny >= 0 && ny < maze.height && nx >= 0 && nx < maze.width &&
+            maze.isClear(nx, ny, 1, 1) && !visited(nx -> ny)) {
+            queue.enqueue((nx, ny, steps + 1))
+            visited += (nx -> ny)
+          }
         }
       }
-    }
-    1000000000
+      1000000000
+    } else 1000000000
   }
 
 }

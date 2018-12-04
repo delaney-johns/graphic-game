@@ -13,9 +13,9 @@ object Server extends UnicastRemoteObject with App with RemoteServer {
   LocateRegistry.createRegistry(1099)
   Naming.rebind("GraphicGameServer", this)
   val level = new Level
-  //TODO: make more than one enemy appear in random places each time
-  for(i <- 1 to 20) new Enemy1(1.5+ util.Random.nextInt(20)*3, 1.5+ util.Random.nextInt(20)*3, level)
-  for(i <- 1 to 10) new Enemy2(1.5+ util.Random.nextInt(20)*3, 1.5+ util.Random.nextInt(20)*3, level)
+  //Enemies appear randomly
+  //for(i <- 1 to 20) new Enemy1(1.5+ util.Random.nextInt(20)*3, 1.5+ util.Random.nextInt(20)*3, level)
+  //for(i <- 1 to 10) new Enemy2(1.5+ util.Random.nextInt(20)*3, 1.5+ util.Random.nextInt(20)*3, level)
   var clientList = List[RemoteClient]()
   val connectedPlayerQueue = new LinkedBlockingQueue[Player]()
   def connect(client: RemoteClient): RemotePlayer = {

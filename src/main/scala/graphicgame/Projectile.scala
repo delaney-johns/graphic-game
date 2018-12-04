@@ -15,7 +15,8 @@ class Projectile(
   def isDead: Boolean = dead
 
   def hitEnemy() = dead = true
-
+//TODO: bug in projectile speed, not always the same
+  
   //Default speed for a projectile
   val speed = 3
 

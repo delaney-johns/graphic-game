@@ -83,19 +83,19 @@ class Player(
     if (left) move(-speed * delay, 0)
     if (right) move(speed * delay, 0)
     if (w && coolDown <= 0) {
-      new Projectile(x, y, level, 0, -speed * delay)
+      new Projectile(x, y - 1, level, 0, -speed * delay)
       coolDown = .5
     }
     if (a && coolDown <= 0) {
-      new Projectile(x, y, level, -speed * delay, 0)
+      new Projectile(x - 1, y, level, -speed * delay, 0)
       coolDown = .5
     }
     if (s && coolDown <= 0) {
-      new Projectile(x, y, level, 0, speed * delay)
+      new Projectile(x, y + 1, level, 0, speed * delay)
       coolDown = .5
     }
     if (d && coolDown <= 0) {
-      new Projectile(x, y, level, speed * delay, 0)
+      new Projectile(x + 1, y, level, speed * delay, 0)
       coolDown = .5
     }
     killPlayer
@@ -113,6 +113,13 @@ class Player(
     for (enemy <- level.enemies) {
       if (intersects(enemy)) {
         dead = true
+      }
+      //TODO:this doesnt work. why? same code as enemies which currently works.
+      for (projectiles <- level.projectiles) {
+        if (intersects(projectiles)) {
+          println("I ran into pr")
+          dead = true
+        }
       }
     }
   }

@@ -39,7 +39,6 @@ class Enemy1(
           level.shortestPath(x, y + 1, players(0).x, players(0).y),
           level.shortestPath(x - 1, y, players(0).x, players(0).y))
 
-        println(distanceList)
 
         //Determines index of minimum steps
         val distance = distanceList.indexOf(distanceList.min)
@@ -73,7 +72,7 @@ class Enemy1(
     if (level.maze.isClear(_x + changeX, _y + changeY, width, height)) {
       _x += changeX
       _y += changeY
-    } else println("shortest path took me in a wall.")
+    }
   }
 
   def buildPassableEntity = PassableEntity(EntityType.Enemy1, x, y, width, height)

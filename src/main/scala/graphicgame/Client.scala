@@ -27,7 +27,7 @@ object Client extends UnicastRemoteObject with JFXApp with RemoteClient {
   }
   val player: RemotePlayer = server.connect(this)
   def drawLevel(passableLevel: PassableLevel): Unit = {
-    Platform.runLater(renderer.render(passableLevel, player.x, player.y))
+    Platform.runLater(renderer.render(passableLevel, player.x, player.y, player.score))
   }
   stage = new JFXApp.PrimaryStage {
     title = "Easter Eggs"

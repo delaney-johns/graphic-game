@@ -21,6 +21,7 @@ import java.rmi.server.UnicastRemoteObject
   def dReleased()
   def x: Double
   def y: Double
+  def score: Int
 }
 
 class Player(
@@ -34,6 +35,7 @@ class Player(
   var dead = false
   def isDead: Boolean = dead
   private var coolDown = 0.0
+  private var _score = 0
 
   //Default speed for player.
   val speed = 3.0
@@ -73,6 +75,8 @@ class Player(
   def aReleased = { a = false }
   def sReleased = { s = false }
   def dReleased = { d = false }
+  
+  def score = _score
 
   //If directional key is pressed, player moves in appropriate x, y direction.
   //If WASD keys are pressed, projectiles shoot in appropriate direction.
@@ -83,19 +87,19 @@ class Player(
     if (left) move(-speed * delay, 0)
     if (right) move(speed * delay, 0)
     if (w && coolDown <= 0) {
-      new Projectile(x, y - 1, level, 0, -speed * delay)
+      new Projectile(x, y - 1, level, 0, -1, this)
       coolDown = .5
     }
     if (a && coolDown <= 0) {
-      new Projectile(x - 1, y, level, -speed * delay, 0)
+      new Projectile(x - 1, y, level, -1, 0, this)
       coolDown = .5
     }
     if (s && coolDown <= 0) {
-      new Projectile(x, y + 1, level, 0, speed * delay)
+      new Projectile(x, y + 1, level, 0, 1, this)
       coolDown = .5
     }
     if (d && coolDown <= 0) {
-      new Projectile(x + 1, y, level, speed * delay, 0)
+      new Projectile(x + 1, y, level, 1, 0, this)
       coolDown = .5
     }
     killPlayer
@@ -114,10 +118,9 @@ class Player(
       if (intersects(enemy)) {
         dead = true
       }
-      //TODO:this doesnt work. why? same code as enemies which currently works.
+      
       for (projectiles <- level.projectiles) {
         if (intersects(projectiles)) {
-          println("I ran into pr")
           dead = true
         }
       }
@@ -129,6 +132,10 @@ class Player(
     val overlapX = (_x - enemy.x).abs < 0.5 * (width + enemy.width)
     val overlapY = (_y - enemy.y).abs < 0.5 * (height + enemy.height)
     overlapX && overlapY
+  }
+  
+  def incrementScore() = {
+    _score += 10
   }
 
   def buildPassableEntity = PassableEntity(EntityType.Player, x, y, width, height)

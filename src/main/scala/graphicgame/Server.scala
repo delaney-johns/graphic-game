@@ -14,14 +14,13 @@ object Server extends UnicastRemoteObject with App with RemoteServer {
   Naming.rebind("GraphicGameServer", this)
   val level = new Level
   //Enemies appear randomly
-  //for(i <- 1 to 20) new Enemy1(1.5+ util.Random.nextInt(20)*3, 1.5+ util.Random.nextInt(20)*3, level)
-  //for(i <- 1 to 10) new Enemy2(1.5+ util.Random.nextInt(20)*3, 1.5+ util.Random.nextInt(20)*3, level)
+  for (i <- 1 to 20) new Enemy1(1.5 + util.Random.nextInt(20) * 3, 1.5 + util.Random.nextInt(20) * 3, level)
+  for (i <- 1 to 10) new Enemy2(1.5 + util.Random.nextInt(20) * 3, 1.5 + util.Random.nextInt(20) * 3, level)
   var clientList = List[RemoteClient]()
   val connectedPlayerQueue = new LinkedBlockingQueue[Player]()
   def connect(client: RemoteClient): RemotePlayer = {
-    println("connecting player")
     clientList = client :: clientList
-    val player = new Player(1.5+ util.Random.nextInt(20)*3, 1.5+ util.Random.nextInt(20)*3, level)
+    val player = new Player(1.5 + util.Random.nextInt(20) * 3, 1.5 + util.Random.nextInt(20) * 3, level)
     connectedPlayerQueue.put(player)
     player
   }

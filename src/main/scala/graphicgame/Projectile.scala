@@ -5,7 +5,8 @@ class Projectile(
   private var _y: Double,
   val level: Level,
   val directionX: Double,
-  val directionY: Double) extends Entity {
+  val directionY: Double,
+  val playerOfOrigin: Player) extends Entity {
   level += this
   def x: Double = _x
   def y: Double = _y
@@ -14,15 +15,17 @@ class Projectile(
   var dead = false
   def isDead: Boolean = dead
 
-  def hitEnemy() = dead = true
-//TODO: bug in projectile speed, not always the same
+  def hitEnemy() = {
+    playerOfOrigin.incrementScore()
+    dead = true
+  }
   
   //Default speed for a projectile
-  val speed = 3
+  val speed = 5.0
 
   //Moves a projectile, if walls are not in the path
   def update(delay: Double): Unit = {
-    move(directionX, directionY)
+    move(directionX * speed * delay, directionY * speed * delay)
   }
 
   def intersects(enemy: Entity): Boolean = {
